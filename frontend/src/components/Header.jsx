@@ -18,8 +18,8 @@ const Wrapper = styled.div`
 
 const Logo = styled.h1`
   text-align: center;
-  padding-top: 10px;
-  font-size: 25px;
+  padding-top: 12px;
+  font-size: 22.5px;
   font-weight: var(--semi-bold);
 `
 
