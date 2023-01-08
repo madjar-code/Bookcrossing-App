@@ -6,6 +6,7 @@ import {
 
 import Login from './pages/Login'
 import Register from './pages/Register';
+import Home from './pages/Home';
 import Profile from './pages/Profile';
 import BookStorage from './pages/BookStorage';
 
@@ -16,6 +17,7 @@ function App() {
   return (
     <Router>
       <Routes>
+        <Route path='/' element={<Home/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/register' element={<Register/>}/>
         <Route path='/my-profile' element={<Profile/>}/>
