@@ -6,7 +6,9 @@ import UserItem from "../components/UserItem";
 
 
 const Container = styled.div`
-  padding-bottom: 50px;
+  min-height: 100vh;
+  background-color: var(--front-color);
+  padding-bottom: 75px;
 `
 
 const DataContainer = styled.div`

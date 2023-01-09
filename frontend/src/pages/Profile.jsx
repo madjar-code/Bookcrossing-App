@@ -2,6 +2,7 @@ import React from "react";
 
 import styled from 'styled-components'
 import Header from "../components/Header";
+import AdItem from "../components/AdItem";
 
 import BookIcon from '@mui/icons-material/Book';
 import FeedIcon from '@mui/icons-material/Feed';
@@ -11,7 +12,7 @@ const Container = styled.div`
 `
 
 const AvatarContainer = styled.div`
-  margin: 29px auto;
+  margin: 25px auto;
   display: flex;
   flex-direction: column;
   width: 125px;
@@ -32,7 +33,7 @@ const Label = styled.p`
 `
 
 const AmountContainer = styled.div`
-  margin-top: 15px;
+  margin-top: 12.5px;
   display: flex;
   justify-content: space-between;
 `
@@ -94,6 +95,22 @@ const ChangeButton = styled.button`
   margin-right: 10px;
 `
 
+const AdListLabel = styled.p`
+  text-align: center;
+  margin-top: 35px;
+  font-size: 22px;
+  opacity: 0.6;
+`
+
+const AdsContainer = styled.div`
+  margin-top: 10px;
+  display: grid;
+  padding: 0 10px;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 10px;
+  grid-row-gap: 10px;
+`
+
 
 const Profile = () => {
   return (
@@ -135,6 +152,13 @@ const Profile = () => {
         <SmallLabel>**На сайте с 31.12.2022</SmallLabel>
         <ChangeButton>Изменить</ChangeButton>
       </BottomContainer>
+      <AdListLabel>
+        Объявления пользователя
+      </AdListLabel>
+      <AdsContainer>
+        <AdItem/>
+        <AdItem/>
+      </AdsContainer>
     </Container>
   )
 };

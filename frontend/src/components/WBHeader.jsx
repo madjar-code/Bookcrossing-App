@@ -24,7 +24,7 @@ const Label = styled.div`
   width: 100%;
   text-align: center;
   font-weight: var(--medium);
-  font-size: 22.5px;
+  font-size: 21px;
   opacity: 0.7;
 `
 
