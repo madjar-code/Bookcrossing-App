@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from 'styled-components'
 import UserItem from "../components/UserItem";
 import WBHeader from "../components/WBHeader";
@@ -35,18 +35,20 @@ const SmallImgContainer = styled.div`
   margin-top: 15px;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  column-gap: 6.25px;
+  column-gap: 10px;
 `
 
 const SmallImage = styled.img`
   height: 50px;
   width: 100%;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+  border-radius: 5px;
   margin-right: 6px;
   object-fit: cover;
 `
 
 const OfferRequestContainer = styled.div`
-  margin-top: 40px;
+  margin-top: 30px;
   padding: 0 10px;
 `
 
@@ -59,13 +61,11 @@ const ButtonContainer = styled.div`
 
 const RequestButton = styled.button`
   font-size: 19px;
-  font-weight: var(--semi-bold);
+  border-radius: 15px;
 `
 
 const OfferButton = styled.button`
-  opacity: 0.4;
   font-size: 19px;
-  box-shadow: var(--shadow);
   border-radius: 15px;
 `
 
@@ -73,8 +73,16 @@ const RequestText = styled.p`
   margin-top: 10px;
 `
 
+const OfferContainer = styled.div`
+`
+
+const SectionTitle = styled.p`
+`
+
+
+
 const OwnerContainer = styled.div`
-  margin-top: 40px;
+  margin-top: 35px;
   padding-left: 10px;
   display: flex;
   align-items: center;
@@ -86,6 +94,11 @@ const Name = styled.p`
 
 
 const AdDetail = () => {
+  const activeStyle = {opacity: '0.4', boxShadow: 'var(--big-shadow)'}
+  const [requestIsActive, setRequestActive] = useState(true)
+  const [leftButtonStyle, setLeftButtonStyle] = useState({})
+  const [rightButtonStyle, setRightButtonStyle] = useState(activeStyle)
+  
   return (
     <Container>
       <WBHeader title={'Про объявление'}/>
@@ -103,9 +116,28 @@ const AdDetail = () => {
 
       <OfferRequestContainer>
         <ButtonContainer>
-          <RequestButton>Взамен</RequestButton>
-          <OfferButton>Предлагаю</OfferButton>
+          <RequestButton
+            onClick={() => {
+              setRequestActive(true);
+              setLeftButtonStyle({})
+              setRightButtonStyle(activeStyle)}}
+            style={leftButtonStyle}
+          >
+            Взамен
+          </RequestButton>
+          <OfferButton
+            onClick={() => {
+              setRequestActive(false);
+              setLeftButtonStyle(activeStyle)
+              setRightButtonStyle({})}}
+            style={rightButtonStyle}
+          >
+            Предлагаю
+          </OfferButton>
         </ButtonContainer>
+        {
+        requestIsActive
+        ?
         <RequestText>
           Lorem Ipsum is simply dummy
           text of the printing and typesetting
@@ -115,6 +147,29 @@ const AdDetail = () => {
           printer took a galley of type and
           scrambled it to make a type specimen
         </RequestText>
+        :
+        <OfferContainer>
+          <SectionTitle>Книги</SectionTitle>
+          <Books>
+            <Book>Остров</Book>
+            <Book>Long Shadow</Book>
+            <Book>Сдвиг</Book>
+          </Books>
+
+          <SectionTitle>Авторы</SectionTitle>
+          <Authors>
+            <Author>Автор 1</Author>
+            <Author>Автор 2</Author>
+          </Authors>
+
+          <SectionTitle>Книги</SectionTitle>
+          <Genres>
+            <Genre>Жанр 1</Genre>
+            <Genre>Жанр 2</Genre>
+          </Genres>
+        </OfferContainer>
+        }
+        
       </OfferRequestContainer>
       <OwnerContainer>
         <Name>Владелец</Name>

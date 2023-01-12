@@ -6,6 +6,8 @@ import HomeHeader from "../components/HomeHeader";
 
 
 const Container = styled.div`
+  min-height: 100vh;
+  padding-bottom: 50px;
 `
 
 const FilterContainer = styled.div`
@@ -20,7 +22,7 @@ const Filter = styled.div`
 const Select = styled.select`
   text-align: center;
   outline: none;
-  font-size: 19px;
+  font-size: 16px;
   border: 2px solid rgba(0, 0, 0, 0.4);
   border-radius: 5px;
 `

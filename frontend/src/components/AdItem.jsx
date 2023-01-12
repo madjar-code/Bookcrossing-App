@@ -65,7 +65,7 @@ const AdItem = ({ item }) => {
         <Image src='https://i.ibb.co/S6qMxwr/jean.jpg'/>
       </ImgContainer>
       <BottomContainer>
-        <Titles>Второй меч, Бойцовский клуб</Titles>
+        <Titles>Второй меч</Titles>
       </BottomContainer>
     </Container>
   )
