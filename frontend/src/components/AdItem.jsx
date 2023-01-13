@@ -7,11 +7,6 @@ const Container = styled.div`
   border-radius: 10px;
   background-color: var(--front-color);
   box-shadow: var(--shadow);
-  // &:hover {
-  //   cursor: pointer;
-  //   scale: 1.04;
-  //   transition: 500ms;
-  // }
 `
 
 const ImgContainer = styled.div`

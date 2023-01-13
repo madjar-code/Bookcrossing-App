@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 import styled from 'styled-components'
 import Header from "../components/Header";
@@ -87,10 +88,16 @@ const ChangeButton = styled.button`
   box-shadow: var(--shadow);
   margin-top: 10px;
   margin-right: 10px;
+
+  &:hover {
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.25);
+  }
 `
 
 
 const Profile = () => {
+  const navigate = useNavigate()
+
   return (
     <Container>
       <Header/>
@@ -127,7 +134,7 @@ const Profile = () => {
       </InfoContainer>
       <BottomContainer>
         <SmallLabel>**На сайте с 31.12.2022</SmallLabel>
-        <ChangeButton>Изменить</ChangeButton>
+        <ChangeButton onClick={() => navigate('/edit-profile')}>Изменить</ChangeButton>
       </BottomContainer>
     </Container>
   )

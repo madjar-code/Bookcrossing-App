@@ -13,6 +13,7 @@ import AdDetail from './pages/AdDetail';
 import MyAds from './pages/MyAds';
 
 import './App.css';
+import CreateAd from './pages/CreateAd';
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
         <Route path='/my-profile' element={<Profile/>}/>
         <Route path='/edit-profile' element={<EditProfile/>}/>
         <Route path='/ad' element={<AdDetail/>}/>
+        <Route path='/create-ad' element={<CreateAd/>}/>
         <Route path='/my-ads' element={<MyAds/>}/>
       </Routes>
     </Router>

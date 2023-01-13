@@ -1,7 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import styled from 'styled-components'
 
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import styled from 'styled-components'
 
 
 const Container = styled.div`
@@ -17,7 +18,7 @@ const Wrapper = styled.div`
 `
 
 const Icon = styled.div`
-  position: absolute;
+  width: 15px;
 `
 
 const Label = styled.div`
@@ -30,10 +31,14 @@ const Label = styled.div`
 
 
 const WBHeader = ({ title }) => {
+  const navigate = useNavigate()
+
+  const goBack = () => navigate(-1)
+
   return (
     <Container>
       <Wrapper>
-        <Icon><ArrowBackIosIcon/></Icon>
+        <Icon onClick={goBack}><ArrowBackIosIcon/></Icon>
         <Label>{ title }</Label>
       </Wrapper>
     </Container>

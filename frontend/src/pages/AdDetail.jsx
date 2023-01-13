@@ -74,12 +74,15 @@ const RequestText = styled.p`
 `
 
 const OfferContainer = styled.div`
+  margin-top: 20px;
 `
 
-const SectionTitle = styled.p`
+const DataContainer = styled.div`
+  display: grid;
+  grid-template-columns: 55px 1fr;
+  grid-template-rows: 20px 20px 20px;
+  row-gap: 15px;
 `
-
-
 
 const OwnerContainer = styled.div`
   margin-top: 35px;
@@ -92,22 +95,33 @@ const Name = styled.p`
   opacity: 0.6;
 `
 
+const Data = styled.span`
+  
+`
+
+const DescriptionContainer = styled.div`
+  margin-top: 20px;
+`
+
+const Description = styled.div`
+  font-size: 15px;
+  margin-top: 5px;
+`
+
 
 const AdDetail = () => {
   const activeStyle = {opacity: '0.4', boxShadow: 'var(--big-shadow)'}
-  const [requestIsActive, setRequestActive] = useState(true)
-  const [leftButtonStyle, setLeftButtonStyle] = useState({})
-  const [rightButtonStyle, setRightButtonStyle] = useState(activeStyle)
+  const [requestIsActive, setRequestActive] = useState(false)
+  const [leftButtonStyle, setLeftButtonStyle] = useState(activeStyle)
+  const [rightButtonStyle, setRightButtonStyle] = useState({})
   
   return (
     <Container>
       <WBHeader title={'Про объявление'}/>
-      <Titles>Остров, Long Shadow, Сдвиг</Titles>
+      <Titles>Остров</Titles>
       <ImgContainer>
         <Image src='https://i.ibb.co/S6qMxwr/jean.jpg'/>
         <SmallImgContainer>
-          <SmallImage src='https://i.ibb.co/S6qMxwr/jean.jpg'/>
-          <SmallImage src='https://i.ibb.co/S6qMxwr/jean.jpg'/>
           <SmallImage src='https://i.ibb.co/S6qMxwr/jean.jpg'/>
           <SmallImage src='https://i.ibb.co/S6qMxwr/jean.jpg'/>
           <SmallImage src='https://i.ibb.co/S6qMxwr/jean.jpg'/>
@@ -149,28 +163,27 @@ const AdDetail = () => {
         </RequestText>
         :
         <OfferContainer>
-          <SectionTitle>Книги</SectionTitle>
-          <Books>
-            <Book>Остров</Book>
-            <Book>Long Shadow</Book>
-            <Book>Сдвиг</Book>
-          </Books>
-
-          <SectionTitle>Авторы</SectionTitle>
-          <Authors>
-            <Author>Автор 1</Author>
-            <Author>Автор 2</Author>
-          </Authors>
-
-          <SectionTitle>Книги</SectionTitle>
-          <Genres>
-            <Genre>Жанр 1</Genre>
-            <Genre>Жанр 2</Genre>
-          </Genres>
+          <DataContainer>
+            <Name>Автор</Name><Data>Олдос Хаксли</Data>
+            <Name>Жанр</Name><Data>Утопия</Data>
+            <Name>ISBN</Name><Data>-</Data>              
+          </DataContainer>
+          <DescriptionContainer>
+            <Name>Описание</Name>
+            <Description>
+              Lorem Ipsum is simply dummy text
+              of the printing and typesetting
+              industry. Lorem Ipsum has been the 
+              industry's standard dummy text ever
+              since the 1500s, when an unknown
+              printer took a galley of type and
+              scrambled it to make a type specimen 
+            </Description>
+          </DescriptionContainer>
         </OfferContainer>
         }
-        
       </OfferRequestContainer>
+
       <OwnerContainer>
         <Name>Владелец</Name>
         <UserItem username='Evan_3000'/>

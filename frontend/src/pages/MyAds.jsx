@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from 'styled-components'
 
 import Header from "../components/Header";
@@ -27,8 +28,21 @@ const AdsContainer = styled.div`
   grid-row-gap: 10px;
 `
 
+const PlusAd = styled.div`
+  padding-top: 60px;
+  text-align: center;
+  height: 252px;
+  border-radius: 10px;
+  background-color: #F5F5F5;
+  font-size: 100px;
+  box-shadow: var(--shadow);
+  font-weight: 200;
+  opacity: 0.6;
+`
+
 
 const MyAds = () => {
+  const navigate = useNavigate()
   return (
     <Container>
       <Header/>
@@ -38,6 +52,9 @@ const MyAds = () => {
         <AdItem/>
         <AdItem/>
         <AdItem/>
+        <PlusAd onClick={() => navigate('/create-ad')}>
+          +
+        </PlusAd>
       </AdsContainer>
     </Container>
   )
