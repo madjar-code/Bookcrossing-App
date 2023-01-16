@@ -1,8 +1,7 @@
-from django.contrib import auth
-
 from rest_framework import status
 from rest_framework.generics import \
     GenericAPIView, RetrieveUpdateAPIView
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.parsers import \
     MultiPartParser, FormParser, JSONParser
 from rest_framework.response import Response
@@ -35,6 +34,7 @@ class LoginAPIView(GenericAPIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
+        print(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -48,11 +48,24 @@ class UserAPIView(RetrieveUpdateAPIView):
     lookup_field = 'slug'
 
 
-@api_view(['GET'])
-def get_current_user(request):
+class CurrentUserAPIView(RetrieveUpdateAPIView):
     """
-    Getting current user, that autenticated on backend
+    API view for work with current user
     """
-    user = auth.get_user(request)
-    serializer = UserSerializer(user)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UserSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        serializer = self.serializer_class(request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def update(self, request, *args, **kwargs):
+        serializer_data = request.data.get('user', {})
+
+        serializer = self.serializer_class(
+            request.user, data=serializer_data, partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_200_OK)

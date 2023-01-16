@@ -1,11 +1,6 @@
-import React from "react";
-
-import {
-  useNavigate
-} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import styled from 'styled-components'
-
 import LoginBlock from "../components/LoginBlock";
 
 
@@ -29,8 +24,7 @@ const Link = styled.a`
 
 
 const Login = () => {
-
-  let navigate = useNavigate()
+  const navigate = useNavigate()
 
   return (
     <Container>

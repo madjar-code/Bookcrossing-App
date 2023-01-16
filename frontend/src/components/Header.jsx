@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import WidgetsIcon from '@mui/icons-material/Widgets';
 import CloseIcon from '@mui/icons-material/Close';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
-import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
+import LogoutIcon from '@mui/icons-material/Logout';
 import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
 import ViewListOutlinedIcon from '@mui/icons-material/ViewListOutlined';
 
+import AuthContext from '../context/AuthContext';
+
+
 const Container = styled.div`
-  `
+`
 
 const Wrapper = styled.div`
   height: 50px;
@@ -69,10 +72,15 @@ const IconStyle = {
 }
 
 
-
 const Header = (props) => {
+  let { logoutUser } = useContext(AuthContext)
   const [toggle, showMenu] = useState(true)
   const navigate = useNavigate()
+
+  const handleClick = () => {
+    logoutUser()
+    navigate('/login')
+  }
 
   return (
     <Container>
@@ -91,16 +99,16 @@ const Header = (props) => {
               Главная
             </MenuItem>
             <MenuItem onClick={() => navigate('/my-profile')}>
-              <ChatOutlinedIcon fontSize="large"/>
-              Запросы
-              </MenuItem>
-            <MenuItem onClick={() => navigate('/my-profile')}>
               <PermIdentityOutlinedIcon fontSize="large"/>
               Профиль
             </MenuItem>
             <MenuItem onClick={() => navigate('/my-ads')}>
               <ViewListOutlinedIcon fontSize="large"/>
               Мои объявления
+            </MenuItem>
+            <MenuItem onClick={handleClick}>
+              <LogoutIcon fontSize="large"/>
+              Выйти
             </MenuItem>
           </MenuWrapper>
         </Menu>

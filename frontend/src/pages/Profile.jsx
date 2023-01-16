@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-
 import styled from 'styled-components'
-import Header from "../components/Header";
-
 import FeedIcon from '@mui/icons-material/Feed';
+import Header from "../components/Header";
+import APIService from "../API/APIService";
+import AuthContext from "../context/AuthContext";
+
 
 const Container = styled.div`
   padding-bottom: 100px;
@@ -96,6 +97,8 @@ const ChangeButton = styled.button`
 
 
 const Profile = () => {
+  let { user } = useContext(AuthContext)
+  let [currentUser, setCurrentUser] = useState(null)
   const navigate = useNavigate()
 
   return (

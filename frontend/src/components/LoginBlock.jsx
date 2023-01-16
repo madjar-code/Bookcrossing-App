@@ -1,6 +1,7 @@
-import React from "react";
-
+import { useState, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
+import AuthContext from '../context/AuthContext';
 
 
 const Wrapper = styled.div`
@@ -20,7 +21,7 @@ const Title = styled.h1`
   color: var(--faded-text);
 `
 
-const Form = styled.form`
+const Form = styled.div`
   display: flex;
   flex-direction: column;
 `
@@ -57,14 +58,38 @@ const Button = styled.button`
 `
 
 
-const LoginBlock = (props) => {  
+const LoginBlock = (props) => {
+  let { loginUser } = useContext(AuthContext)
+  let [credentials, setCredentials] = useState(
+    {email: '', password: ''}
+  )
+
+  const navigate = useNavigate()
+
+  const handleEmailChange = (e) => {
+    setCredentials({...credentials, email: e.target.value })
+  }
+
+  const handlePasswordChange = (e) => {
+    setCredentials({ ...credentials, password: e.target.value })
+  }
+
+  const handleClick = () => {
+    loginUser(credentials)
+    navigate('/my-profile')
+  }
+
   return (
     <Wrapper>
       <Title>Вход</Title>
       <Form>
-        <Input placeholder="Почта..."/>
-        <Input  placeholder="Пароль..."/>
-        <Button>Войти!</Button>
+        <Input
+          placeholder="Почта..."
+          onChange={(e) => handleEmailChange(e)}/>
+        <Input
+          placeholder="Пароль..." type="password"
+          onChange={(e) => handlePasswordChange(e)}/>
+        <Button onClick={handleClick}>Войти!</Button>
       </Form>
       {props.children}
     </Wrapper>
