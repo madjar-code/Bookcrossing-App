@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.serializers import SerializerMethodField
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
 from accounts.models import User
@@ -82,6 +83,16 @@ class SimpleUserSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    creation_date = SerializerMethodField()
+
+    def get_creation_date(self, obj):
+        start_string = str(obj.created_at)[:10]
+        DD = start_string[8:10]
+        MM = start_string[5:7]
+        YYYY = start_string[:4]
+        result_string = DD+'.'+MM+'.'+YYYY
+        return result_string
+
     class Meta:
         model = User
         fields = (
@@ -90,7 +101,10 @@ class UserSerializer(serializers.ModelSerializer):
             'email',
             'password',
             'slug',
-            'avatar'
+            'avatar',
+            'description',
+            'address',
+            'creation_date',
         )
         read_only_fields = (
             'username',

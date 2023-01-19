@@ -76,7 +76,8 @@ const LoginBlock = (props) => {
 
   const handleClick = () => {
     loginUser(credentials)
-    navigate('/my-profile')
+    setTimeout(() => navigate('/my-profile'), 500)
+    
   }
 
   return (

@@ -5,7 +5,6 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.parsers import \
     MultiPartParser, FormParser, JSONParser
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
 
 from .serializers import *
 
@@ -34,7 +33,6 @@ class LoginAPIView(GenericAPIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        print(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 

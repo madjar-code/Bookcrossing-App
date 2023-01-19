@@ -8,9 +8,9 @@ class BookGenre(UUIDModel):
     """Book genre model."""
 
     GENRE_CHOICES = (
-      ("Роман", "Роман"),
-      ("Детектив", "Детектив"),
-      ("Фантастика", "Фантастика"),
+        ("Роман", "Роман"),
+        ("Детектив", "Детектив"),
+        ("Фантастика", "Фантастика"),
     )
 
     name = models.CharField(max_length=255, choices=GENRE_CHOICES)
@@ -18,3 +18,34 @@ class BookGenre(UUIDModel):
 
     def __str__(self) -> str:
         return self.name
+
+
+class Ad(UUIDModel, TimeStampedModel):
+    """Ad model."""
+    book_title = models.CharField(max_length=255)
+    book_image = models.ImageField(
+        null=True, blank=True,
+        upload_to='photos_of_books/')
+    book_author = models.CharField(max_length=255)
+    book_genre = models.ForeignKey(to=BookGenre, on_delete=models.PROTECT)
+
+    owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
+
+    requirements_text = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+
+    slug = models.SlugField(
+        max_length=255,
+        unique=True, 
+        null=True, 
+        blank=True)
+
+    def __str__(self) -> str:
+        return self.book_title
+
+    def save(self, *args, **kwargs):
+        """Slug  generation."""
+        if not self.slug:
+            slug_string = create_slug('ad', Ad)
+            self.slug = slug_string
+        super().save(*args, **kwargs)

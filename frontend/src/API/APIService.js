@@ -1,6 +1,6 @@
 export default class APIService {
 
-  static async getUser(slug, setUser) {
+  static async getUser(slug) {
     let response = await fetch(`/api/accounts/${slug}`, {
       method: 'GET',
       headers: {
@@ -10,7 +10,22 @@ export default class APIService {
     let data = await response.json()
 
     if (response.status === 200) {
-      setUser(data)     
+      return data
+    }
+  }
+
+  static async getCurrentUser(authTokens) {
+    let response = await fetch('/api/accounts/current/', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + String(authTokens.access)
+      }
+    })
+    let data = await response.json()
+
+    if (response.status === 200) {
+      return data
     }
   }
 }

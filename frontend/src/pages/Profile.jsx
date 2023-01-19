@@ -97,33 +97,33 @@ const ChangeButton = styled.button`
 
 
 const Profile = () => {
-  let { user } = useContext(AuthContext)
+  let { authTokens } = useContext(AuthContext)
   let [currentUser, setCurrentUser] = useState(null)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    APIService.getCurrentUser(authTokens)
+      .then((data) => {
+        setCurrentUser(data)
+      })
+  }, [authTokens])
 
   return (
     <Container>
       <Header/>
       <AvatarContainer>
-        <Avatar src='https://i.ibb.co/S6qMxwr/jean.jpg'/>
-        <Label>Evan_3000</Label>
+        <Avatar src={ currentUser?.avatar }/>
+        <Label>{ currentUser?.username }</Label>
         <AmountContainer>
           <Ads>3<FeedIcon/></Ads>
         </AmountContainer>
       </AvatarContainer>
       <InfoContainer>
         <InfoItem>Адрес, город</InfoItem>
-        <Text>Кишинев, Молдова</Text>
+        <Text>{currentUser?.address}</Text>
         <InfoItem>Описание</InfoItem>
         <Text>
-          Lorem Ipsum is simply dummy text
-          of the printing and typesetting industry.
-          Lorem Ipsum has been the industry's
-          standard dummy text ever since the
-          1500s, when an unknown printer took
-          a galley of type and scrambled it
-          to make a type specimen book. It
-          has survived not only five centuries,
+          { currentUser?.description }
         </Text>
         <InfoItem>Контакты</InfoItem>
         <ContactContainer>
@@ -136,9 +136,9 @@ const Profile = () => {
         </ContactContainer>
       </InfoContainer>
       <BottomContainer>
-        <SmallLabel>**На сайте с 31.12.2022</SmallLabel>
+        <SmallLabel>**На сайте с { currentUser?.creation_date }</SmallLabel>
         <ChangeButton onClick={() => navigate('/edit-profile')}>Изменить</ChangeButton>
-      </BottomContainer>
+      </BottomContainer>  
     </Container>
   )
 };

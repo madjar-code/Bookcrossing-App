@@ -15,7 +15,7 @@ class UserAdmin(UserAdmin):
         'email', 'username', 'created_at', 'slug', 'is_active'
     )
     fieldsets = (
-        (None, {'fields': ('email', 'username', 'avatar',)}),
+        (None, {'fields': ('email', 'username', 'avatar', 'description', 'address')}),
         ('Permissions', {'fields': ('is_staff', 'is_active')}),
         ('Others', {'fields': ('id', 'created_at', 'updated_at')})
     )

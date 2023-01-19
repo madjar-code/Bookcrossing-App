@@ -12,7 +12,10 @@ from .managers import UserManager
 class User(UUIDModel, AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=255)
     email = models.EmailField(max_length=255, unique=True, db_index=True)
+
     avatar = models.ImageField(null=True, blank=True, upload_to='avatars/')
+    description = models.TextField(blank=True, null=True)
+    address = models.CharField(max_length=255, null=True, blank=True)
 
     slug = models.SlugField(
         max_length=255,

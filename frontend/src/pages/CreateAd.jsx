@@ -77,6 +77,23 @@ const Button = styled.button`
 `
 
 
+const Select = styled.select`
+  align-self: flex-start;
+  margin-top: 20px;
+  text-align: left;
+  outline: none;
+  width: 210px;
+  height: 30px;
+  padding-left: 2px;
+  font-size: 17px;
+  opacity: 0.6;
+  border: 2px solid rgba(0, 0, 0, 0.4);
+  border-radius: 5px;
+`
+
+const Option = styled.option``
+
+
 const CreateAd = () => {
   return (
     <Container>
@@ -88,6 +105,15 @@ const CreateAd = () => {
         </Uploader>
         <Input placeholder="Автор книги..."/>
         <Input placeholder="ISBN..."/>
+        <Select>
+          <Option selected disabled>
+            Выберите жанр книги
+          </Option>
+          <Option>Все жанры</Option>
+          <Option>Фантастика</Option>
+          <Option>Роман</Option>
+          <Option>Публицистика</Option>
+        </Select>
         <Label>Что вы хотите взамен?</Label>
         <Textarea placeholder="Напишите о книгах или жанрах книг, которые вы хотите..."/>
         <Label>Описание книги</Label>

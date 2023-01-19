@@ -1,4 +1,6 @@
-import React from "react";
+import { useState, useEffect, useContext } from "react";
+import APIService from "../API/APIService";
+import AuthContext from "../context/AuthContext";
 import styled from 'styled-components'
 import WBHeader from "../components/WBHeader";
 
@@ -66,12 +68,34 @@ const Button = styled.button`
 
 
 const EditProfile = () => {
+  let { authTokens } = useContext(AuthContext)
+
+  let [currentUser, setCurrentUser] = useState(null)
+  let [newData, setNewData] = useState({
+    username: '',
+    address: '',
+  })
+
+  useEffect(() => {
+    APIService.getCurrentUser(authTokens)
+      .then((data) => {
+        setCurrentUser(data)
+      })
+  }, [authTokens])
+
   return (
     <Container>
       <WBHeader title='Редактировать профиль'/>
       <Form>
-        <Input placeholder="Новый никнейм..."/>
-        <Input placeholder="Новый адрес..."/>
+        <Input
+          placeholder="Новый никнейм..."
+          value={newData.username}
+          onChange={e => setNewData({...newData, username: e.target.value})}
+        />
+        <Input
+          placeholder="Новый адрес..."
+          value={newData.address}
+          onChange={e => setNewData({...newData, address: e.target.value})}/>
         <Label>Новое описание</Label>
         <Textarea placeholder="Напишите коротко о себе..."/>
         <Button>Сохранить!</Button>

@@ -1,5 +1,6 @@
 import random, string
 
+
 def create_slug(prefix, model_class, length=8) -> str:
     """Slug creation."""
     letters = string.ascii_letters
