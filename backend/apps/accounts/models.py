@@ -26,7 +26,7 @@ class User(UUIDModel, AbstractBaseUser, PermissionsMixin):
     # is_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-  
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -37,7 +37,7 @@ class User(UUIDModel, AbstractBaseUser, PermissionsMixin):
 
     def __str__(self) -> str:
         return self.username
-    
+
     def tokens(self) -> dict:
         """
         Возврат токенов для пользователя.
@@ -56,7 +56,7 @@ class User(UUIDModel, AbstractBaseUser, PermissionsMixin):
         letters = string.ascii_letters
         random_string = ''.join(random.choice(letters) for _ in range(length))
         return random_string
-    
+
     def save(self, *args, **kwargs):
         """
         Slug generation

@@ -28,4 +28,18 @@ export default class APIService {
       return data
     }
   }
+
+  static async getAds() {
+    let response = await fetch('/api/ads/', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    let data = await response.json()
+
+    if (response.status === 200) {
+      return data
+    }
+  }
 }

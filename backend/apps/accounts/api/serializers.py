@@ -3,29 +3,30 @@ from rest_framework.serializers import SerializerMethodField
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
 from accounts.models import User
+from common.utils import transform_date
 
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(max_length=68, min_length=2, write_only=True)
+    confirm_password = serializers.CharField(max_length=68, min_length=2, write_only=True)
   
     class Meta:
         model=User
         fields = (
             'email',
             'username',
-            'password'
+            'password',
+            'confirm_password',
         )
-    
-    def validate(self, attrs):
-        email = attrs.get('email', '')
-        username = attrs.get('username', '')
 
-        if not username.isalnum():
+    def validate_confirm_password(self, value):
+        confirm_password = self.get_initial().get("password")
+
+        if self.password != confirm_password:
             raise serializers.ValidationError(
-                'The username should contain alphanumeric characters'
-            )
-        return attrs
-    
+                'Password needs to be at least 6 characters long.')
+        return value
+
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
 
@@ -54,10 +55,10 @@ class LoginSerializer(serializers.ModelSerializer):
         user = auth.authenticate(email=email, password=password)
 
         if not user:
-            raise AuthenticationFailed('Invalid credentials, try again')
+            raise AuthenticationFailed('Некорректный логин или пароль')
 
         if not user.is_active:
-            raise AuthenticationFailed('Account disabled, contact admin')
+            raise AuthenticationFailed('Аккаунт отключен, обратитесь к админу')
 
         return {
             'access': user.tokens()['access'],
@@ -86,12 +87,7 @@ class UserSerializer(serializers.ModelSerializer):
     creation_date = SerializerMethodField()
 
     def get_creation_date(self, obj):
-        start_string = str(obj.created_at)[:10]
-        DD = start_string[8:10]
-        MM = start_string[5:7]
-        YYYY = start_string[:4]
-        result_string = DD+'.'+MM+'.'+YYYY
-        return result_string
+        return transform_date(obj.created_at)
 
     class Meta:
         model = User

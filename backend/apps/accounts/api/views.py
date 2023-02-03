@@ -15,6 +15,7 @@ class RegisterAPIView(GenericAPIView):
     TODO: Exception handling
     """
     serializer_class = RegisterSerializer
+    parser_classes = (MultiPartParser, FormParser, JSONParser)
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)

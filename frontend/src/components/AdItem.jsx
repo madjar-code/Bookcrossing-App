@@ -1,4 +1,4 @@
-import React from "react";
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 
@@ -14,6 +14,7 @@ const ImgContainer = styled.div`
 `
 
 const UserAvatar = styled.img`
+  pointer-events: none;
   position: absolute;
   top: 5px;
   left: 5px;
@@ -52,15 +53,18 @@ const Titles = styled.div`
 
 
 const AdItem = ({ item }) => {
+  const navigate = useNavigate()
+
   return (
-    <Container>
+    <Container onClick={() => navigate('/ad')}>
       <ImgContainer>
-        <UserAvatar src='https://i.ibb.co/S6qMxwr/jean.jpg'/>
-        <Date>31.12.2022</Date>
-        <Image src='https://i.ibb.co/S6qMxwr/jean.jpg'/>
+        <UserAvatar
+          src='https://i.ibb.co/S6qMxwr/jean.jpg'/>
+        <Date>{item?.creation_date}</Date>
+        <Image src={item?.book_image}/>
       </ImgContainer>
       <BottomContainer>
-        <Titles>Второй меч</Titles>
+        <Titles>{item?.book_title}</Titles>
       </BottomContainer>
     </Container>
   )

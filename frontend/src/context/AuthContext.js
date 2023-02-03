@@ -35,9 +35,7 @@ export const AuthProvider = ({ children }) => {
       setUser(jwt_decode(data.access))
       localStorage.setItem('authTokens', JSON.stringify(data))
     }
-    else {
-      alert('Некорректные данные!')
-    }
+    return response.status
   }
 
   const signupUser = async (credentials) => {

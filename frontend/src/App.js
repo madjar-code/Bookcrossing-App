@@ -65,10 +65,6 @@ function App() {
               </PrivateRoute>
             }/>
           <Route path="*" element={<NotFoundPage/>}/>
-          {/* <Route path='/my-profile' element={<Profile/>}/> */}
-          {/* <Route path='/edit-profile' element={<EditProfile/>}/> */}
-          {/* <Route path='/create-ad' element={<CreateAd/>}/> */}
-          {/* <Route path='/my-ads' element={<MyAds/>}/> */}
         </Routes>
       </AuthProvider>
     </Router>

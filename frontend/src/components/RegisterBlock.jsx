@@ -57,7 +57,7 @@ const Button = styled.button`
 `
 
 
-const RegisterBlock = (props) => {  
+const RegisterBlock = (props) => {
   return (
     <Wrapper>
       <Title>Регистрация</Title>

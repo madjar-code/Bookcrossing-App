@@ -1,8 +1,8 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import styled from 'styled-components'
 import AdItem from "../components/AdItem";
-
 import HomeHeader from "../components/HomeHeader";
+import APIService from "../API/APIService";
 
 
 const Container = styled.div`
@@ -40,6 +40,13 @@ const AdsContainer = styled.div`
 
 
 const Home = () => {
+  const [ads, setAds] = useState([])
+
+  useEffect(() => {
+    APIService.getAds()
+    .then(data => setAds(data))
+  }, [])
+
   return (
     <Container>
       <HomeHeader/>
@@ -57,10 +64,8 @@ const Home = () => {
         </Filter>
       </FilterContainer>
       <AdsContainer>
-        <AdItem/>
-        <AdItem/>
-        <AdItem/>
-        <AdItem/>
+        {ads.map((item, index) =>
+         <AdItem item={item} key={index}/>)}
       </AdsContainer>
     </Container>
     

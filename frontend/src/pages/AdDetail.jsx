@@ -5,9 +5,9 @@ import WBHeader from "../components/WBHeader";
 
 
 const Container = styled.div`
-  min-height: 100vh;
+  min-height: 950px;
   background-color: var(--front-color);
-  padding-bottom: 75px;
+  padding-bottom: 50px;
 `
 
 const Titles = styled.p`

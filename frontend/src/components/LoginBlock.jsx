@@ -6,7 +6,7 @@ import AuthContext from '../context/AuthContext';
 
 const Wrapper = styled.div`
   width: 355px;
-  height: 235px;
+  height: ${props => props.height};
   padding-top: 18px;
   background-color: var(--front-color);
   border-radius: 20px;
@@ -57,12 +57,22 @@ const Button = styled.button`
   }
 `
 
+const ErrorMessage = styled.p`
+  margin-top: -3px;
+  margin-left: 21px;
+  font-size: 12px;
+  font-weight: 600;
+  color: red;
+`
+
 
 const LoginBlock = (props) => {
   let { loginUser } = useContext(AuthContext)
   let [credentials, setCredentials] = useState(
     {email: '', password: ''}
   )
+
+  let [valid, setValid] = useState(true)
 
   const navigate = useNavigate()
 
@@ -75,13 +85,21 @@ const LoginBlock = (props) => {
   }
 
   const handleClick = () => {
-    loginUser(credentials)
-    setTimeout(() => navigate('/my-profile'), 500)
-    
+    setValid(true)
+    loginUser(credentials).then(
+      code => {
+        if (code === 200) {
+          setTimeout(() => navigate('/my-profile'), 1000)
+        }
+        else {
+          setValid(false)
+        }
+      }
+    )
   }
 
   return (
-    <Wrapper>
+    <Wrapper height={valid ? '235px': '245px'}>
       <Title>Вход</Title>
       <Form>
         <Input
@@ -90,6 +108,9 @@ const LoginBlock = (props) => {
         <Input
           placeholder="Пароль..." type="password"
           onChange={(e) => handlePasswordChange(e)}/>
+        {
+          valid ? <></> : <ErrorMessage>Неверный логин или пароль</ErrorMessage>
+        }
         <Button onClick={handleClick}>Войти!</Button>
       </Form>
       {props.children}
