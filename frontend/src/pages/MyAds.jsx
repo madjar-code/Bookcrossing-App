@@ -1,9 +1,11 @@
-import React from "react";
+import { useState, useEffect, useContext } from 'react'
 import { useNavigate } from "react-router-dom";
 import styled from 'styled-components'
 
 import Header from "../components/Header";
 import AdItem from "../components/AdItem";
+import APIService from '../API/APIService';
+import AuthContext from '../context/AuthContext';
 
 
 const Container = styled.div`
@@ -43,15 +45,21 @@ const PlusAd = styled.div`
 
 const MyAds = () => {
   const navigate = useNavigate()
+  const { authTokens } = useContext(AuthContext)
+  const [ads, setAds] = useState([])
+
+  useEffect(() => {
+    APIService.getMyAds(authTokens)
+    .then(data => setAds(data))
+  }, [])
+
   return (
     <Container>
       <Header/>
       <Label>Ваши объявления</Label>
       <AdsContainer>
-        <AdItem/>
-        <AdItem/>
-        <AdItem/>
-        <AdItem/>
+        {ads.map((item, index) =>
+         <AdItem item={item} key={index}/>)}
         <PlusAd onClick={() => navigate('/create-ad')}>
           +
         </PlusAd>

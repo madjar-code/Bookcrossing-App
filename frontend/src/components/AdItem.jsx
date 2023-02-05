@@ -56,10 +56,10 @@ const AdItem = ({ item }) => {
   const navigate = useNavigate()
 
   return (
-    <Container onClick={() => navigate('/ad')}>
+    <Container onClick={() => navigate(`/${item?.slug}`)}>
       <ImgContainer>
         <UserAvatar
-          src='https://i.ibb.co/S6qMxwr/jean.jpg'/>
+          src={item?.owner_avatar}/>
         <Date>{item?.creation_date}</Date>
         <Image src={item?.book_image}/>
       </ImgContainer>

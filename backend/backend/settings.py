@@ -7,7 +7,7 @@ env = environ.Env()
 environ.Env.read_env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-PROJECT_ROOT = PROJECT_ROOT = Path(__file__).parent.parent
+PROJECT_ROOT = Path(__file__).parent.parent
 
 sys.path.append(str(PROJECT_ROOT / 'apps'))
 

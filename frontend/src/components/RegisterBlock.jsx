@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 const Wrapper = styled.div`
   width: 355px;
-  height: 300px;
+  height: 350px;
   padding-top: 18px;
   background-color: var(--front-color);
   border-radius: 20px;
@@ -42,7 +42,7 @@ const Input = styled.input`
 const Button = styled.button`
   position: relative;
   left: 50%;
-  top: 15px;
+  top: 10px;
   margin-left: -75px;
   color: var(--button-color);
   border: 2px solid var(--button-color);
@@ -64,7 +64,8 @@ const RegisterBlock = (props) => {
       <Form>
         <Input placeholder="Никнейм..."/>
         <Input placeholder="Почта..."/>
-        <Input  placeholder="Пароль..."/>
+        <Input placeholder="Пароль..." type="password"/>
+        <Input placeholder="Подтверждение пароля..." type="password"/>
         <Button>Регистрация</Button>
       </Form>
       {props.children}

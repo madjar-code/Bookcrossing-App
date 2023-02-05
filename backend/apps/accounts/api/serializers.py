@@ -1,12 +1,14 @@
+from django.contrib import auth
+from django.core.validators import validate_email
 from rest_framework import serializers
 from rest_framework.serializers import SerializerMethodField
-from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
 from accounts.models import User
 from common.utils import transform_date
 
 
 class RegisterSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField()
     password = serializers.CharField(max_length=68, min_length=2, write_only=True)
     confirm_password = serializers.CharField(max_length=68, min_length=2, write_only=True)
   
@@ -19,12 +21,28 @@ class RegisterSerializer(serializers.ModelSerializer):
             'confirm_password',
         )
 
-    def validate_confirm_password(self, value):
-        confirm_password = self.get_initial().get("password")
+    def validate_email(self, value):
+        email = self.get_initial().get("email")
 
-        if self.password != confirm_password:
+        user = User.objects.filter(email=email).first()
+        if user:
             raise serializers.ValidationError(
-                'Password needs to be at least 6 characters long.')
+                'Такая почта уже зарегистрирована.')
+        try:
+            validate_email(email)
+        except:
+            raise serializers.ValidationError(
+                'Некорректная почта'
+            )
+        return value
+
+    def validate_confirm_password(self, value):
+        password = self.get_initial().get("password")
+        confirm_password = self.get_initial().get("confirm_password")
+
+        if password != confirm_password:
+            raise serializers.ValidationError(
+                'Несовпадение паролей.')
         return value
 
     def create(self, validated_data):

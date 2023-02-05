@@ -42,4 +42,19 @@ export default class APIService {
       return data
     }
   }
+
+  static async getMyAds(authTokens) {
+    let response = await fetch('/api/ads/current/', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + String(authTokens.access)
+      }
+    })
+    let data = await response.json()
+
+    if (response.status === 200) {
+      return data
+    }
+  }
 }
