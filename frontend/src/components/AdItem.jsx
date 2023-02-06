@@ -56,7 +56,7 @@ const AdItem = ({ item }) => {
   const navigate = useNavigate()
 
   return (
-    <Container onClick={() => navigate(`/${item?.slug}`)}>
+    <Container onClick={() => navigate(`/ads/${item?.slug}`)}>
       <ImgContainer>
         <UserAvatar
           src={item?.owner_avatar}/>

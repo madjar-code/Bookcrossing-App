@@ -29,7 +29,7 @@ class Ad(UUIDModel, TimeStampedModel):
     book_author = models.CharField(max_length=255)
     book_genre = models.ForeignKey(to=BookGenre, on_delete=models.PROTECT)
 
-    owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='ads')
 
     requirements_text = models.TextField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)

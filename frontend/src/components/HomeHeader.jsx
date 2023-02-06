@@ -16,10 +16,14 @@ const SearchInput = styled.input`
   background-color: var(--input-color);
 `
 
-const HomeHeader = () => {
+const HomeHeader = ({filter, setFilter}) => {
   return (
     <Header height='100px'>
-      <SearchInput placeholder="Поиск..."></SearchInput>
+      <SearchInput
+        placeholder="Поиск по названию книги..."
+        value={filter.query}
+        onChange={e => setFilter({...filter, query: e.target.value})}
+      />
     </Header>
   )
 };

@@ -39,6 +39,7 @@ class SimpleAdSerializer(ModelSerializer):
 
 class AdSerializer(ModelSerializer):
     creation_date = SerializerMethodField()
+    owner_username = SerializerMethodField()
     owner_slug = SerializerMethodField()
     genre_title = SerializerMethodField()
     owner_avatar = SerializerMethodField()
@@ -49,11 +50,15 @@ class AdSerializer(ModelSerializer):
     def get_creation_date(self, obj):
         return transform_date(obj.created_at)
 
+    def get_owner_username(self, obj):
+        return obj.owner.username
+
     def get_owner_slug(self, obj):
         return obj.owner.slug
 
     def get_owner_avatar(self, obj):
-        return obj.owner.avatar
+        if obj.owner.avatar:
+            return obj.owner.avatar.url
 
     class Meta:
         model = Ad
@@ -61,12 +66,14 @@ class AdSerializer(ModelSerializer):
             'book_title',
             'book_image',
             'book_author',
-            # 'book_genre',
+            'book_genre',
             'genre_title',
             'creation_date',
             'description',
             'requirements_text',
             'slug',
+            'owner',
+            'owner_username',
             'owner_slug',
             'owner_avatar',
         )

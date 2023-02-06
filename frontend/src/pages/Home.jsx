@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import AdItem from "../components/AdItem";
 import HomeHeader from "../components/HomeHeader";
 import APIService from "../API/APIService";
+import { useAds } from "../hooks/useAds";
 
 
 const Container = styled.div`
@@ -41,6 +42,8 @@ const AdsContainer = styled.div`
 
 const Home = () => {
   const [ads, setAds] = useState([])
+  const [filter, setFilter] = useState({sort: '', query: ''})
+  const sortedAndSearchedAds = useAds(ads, filter.sort, filter.query)
 
   useEffect(() => {
     APIService.getAds()
@@ -49,22 +52,22 @@ const Home = () => {
 
   return (
     <Container>
-      <HomeHeader/>
+      <HomeHeader filter={filter} setFilter={setFilter}/>
       <FilterContainer>
         <Filter>
           <Select>
             <Option selected disabled>
               Интересующие жанры
             </Option>
-            <Option>Все жанры</Option>
-            <Option>Фантастика</Option>
-            <Option>Роман</Option>
-            <Option>Публицистика</Option>
+            <Option >Все жанры</Option>
+            <Option value="Фантастика">Фантастика</Option>
+            <Option value="Роман">Роман</Option>
+            <Option value="Публицистика">Публицистика</Option>
           </Select>
         </Filter>
       </FilterContainer>
       <AdsContainer>
-        {ads.map((item, index) =>
+        {sortedAndSearchedAds.map((item, index) =>
          <AdItem item={item} key={index}/>)}
       </AdsContainer>
     </Container>

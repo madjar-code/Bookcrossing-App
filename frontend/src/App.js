@@ -33,7 +33,8 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route path='/' element={<Home/>}/>
-          <Route path='/:str' element={<AdDetail/>}/>
+          <Route path='/ads/:slug' element={<AdDetail/>}/>
+          <Route path='/users/:slug' element={<Profile/>}/>
           <Route path='/login' element={<Login/>}/>
           <Route path='/register' element={<Register/>}/>
           <Route

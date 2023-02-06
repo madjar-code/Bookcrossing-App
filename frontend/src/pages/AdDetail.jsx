@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import { useState, useEffect, useContext } from "react";
+import { useParams } from "react-router-dom";
 import styled from 'styled-components'
+import APIService from "../API/APIService";
 import UserItem from "../components/UserItem";
 import WBHeader from "../components/WBHeader";
+import AuthContext from "../context/AuthContext";
 
 
 const Container = styled.div`
@@ -110,22 +113,35 @@ const Description = styled.div`
 
 
 const AdDetail = () => {
+  const { user } = useContext(AuthContext)
+  const params = useParams()
+  const [ad, setAd] = useState(null)
+
   const activeStyle = {opacity: '0.4', boxShadow: 'var(--big-shadow)'}
+  const [currentUserIsOwner, setCurrentUserAsOwner] = useState(false)
   const [requestIsActive, setRequestActive] = useState(false)
   const [leftButtonStyle, setLeftButtonStyle] = useState(activeStyle)
   const [rightButtonStyle, setRightButtonStyle] = useState({})
+
+  useEffect(() => {
+    APIService.getAdDetails(params.slug).then(
+      data => setAd(data))
+    if (ad?.owner == user?.user_id){
+      setCurrentUserAsOwner(true)
+    }
+  }, [params.slug])
   
   return (
     <Container>
       <WBHeader title={'Про объявление'}/>
-      <Titles>Остров</Titles>
+      <Titles>{ ad?.book_title }</Titles>
       <ImgContainer>
-        <Image src='https://i.ibb.co/S6qMxwr/jean.jpg'/>
-        <SmallImgContainer>
+        <Image src={ ad?.book_image }/>
+        {/* <SmallImgContainer>
           <SmallImage src='https://i.ibb.co/S6qMxwr/jean.jpg'/>
           <SmallImage src='https://i.ibb.co/S6qMxwr/jean.jpg'/>
           <SmallImage src='https://i.ibb.co/S6qMxwr/jean.jpg'/>
-        </SmallImgContainer>
+        </SmallImgContainer> */}
       </ImgContainer>
 
       <OfferRequestContainer>
@@ -153,31 +169,19 @@ const AdDetail = () => {
         requestIsActive
         ?
         <RequestText>
-          Lorem Ipsum is simply dummy
-          text of the printing and typesetting
-          industry. Lorem Ipsum has been
-          the industry's standard dummy text
-          ever since the 1500s, when an unknown
-          printer took a galley of type and
-          scrambled it to make a type specimen
+          { ad?.requirements_text }
         </RequestText>
         :
         <OfferContainer>
           <DataContainer>
-            <Name>Автор</Name><Data>Олдос Хаксли</Data>
-            <Name>Жанр</Name><Data>Утопия</Data>
-            <Name>ISBN</Name><Data>-</Data>              
+            <Name>Автор</Name><Data>{ ad?.book_author }</Data>
+            <Name>Жанр</Name><Data>{ ad?.genre_title }</Data>
+            <Name>ISBN</Name><Data>-</Data>
           </DataContainer>
           <DescriptionContainer>
             <Name>Описание</Name>
             <Description>
-              Lorem Ipsum is simply dummy text
-              of the printing and typesetting
-              industry. Lorem Ipsum has been the 
-              industry's standard dummy text ever
-              since the 1500s, when an unknown
-              printer took a galley of type and
-              scrambled it to make a type specimen 
+              { ad?.description ? ad?.description : 'Не указано' }
             </Description>
           </DescriptionContainer>
         </OfferContainer>
@@ -186,7 +190,10 @@ const AdDetail = () => {
 
       <OwnerContainer>
         <Name>Владелец</Name>
-        <UserItem username='Evan_3000'/>
+        <UserItem user={
+          {username: ad?.owner_username,
+           avatar:   ad?.owner_avatar,
+           link: currentUserIsOwner ? 'my-profile': `users/${ad?.owner_slug}`}}/>
       </OwnerContainer>
     </Container>
   )

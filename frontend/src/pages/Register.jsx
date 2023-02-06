@@ -19,7 +19,7 @@ const Container = styled.div`
 
 const Label = styled.div`
   text-align: center;
-  margin-top: 50px;
+  margin-top: 35px;
   font-weight: var(--semi-bold);
 `
 

@@ -1,4 +1,4 @@
-import React from "react";
+import { useNavigate } from 'react-router-dom'
 
 import styled from 'styled-components'
 
@@ -26,11 +26,13 @@ const Username = styled.p`
 `
 
 
-const UserItem = ({ username }) => {
+const UserItem = ({ user }) => {
+  const navigate = useNavigate()
+
   return (
-    <Container>
-      <Avatar src='https://i.ibb.co/S6qMxwr/jean.jpg'/>
-      <Username>{ username }</Username>
+    <Container onClick={() => navigate(`/${user?.link}`)}>
+      <Avatar src={user?.avatar}/>
+      <Username>{ user?.username }</Username>
     </Container>
   )
 };

@@ -1,7 +1,9 @@
-import React, { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState, useContext } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from 'styled-components'
+
 import FeedIcon from '@mui/icons-material/Feed';
+import DefaultImage from '../assets/images/default-image.jpg'
 import Header from "../components/Header";
 import APIService from "../API/APIService";
 import AuthContext from "../context/AuthContext";
@@ -97,47 +99,74 @@ const ChangeButton = styled.button`
 
 
 const Profile = () => {
-  let { authTokens } = useContext(AuthContext)
-  let [currentUser, setCurrentUser] = useState(null)
+  const params = useParams()
+
+  const { authTokens } = useContext(AuthContext)
+  const [user, setUser] = useState(null)
+  const [isCurrentUser, setCurrentUser] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
-    APIService.getCurrentUser(authTokens)
+    // console.log(params.slug == undefined)
+    if (params.slug != undefined) {
+      APIService.getOneUser(params.slug)
       .then((data) => {
-        setCurrentUser(data)
+        setUser(data)
+        setCurrentUser(false)
       })
+    } else {
+      APIService.getCurrentUser(authTokens)
+      .then((data) => {
+        setUser(data)
+        setCurrentUser(true)
+      })
+    }
   }, [authTokens])
 
   return (
     <Container>
       <Header/>
       <AvatarContainer>
-        <Avatar src={ currentUser?.avatar }/>
-        <Label>{ currentUser?.username }</Label>
+        <Avatar src={
+          user?.avatar
+          ? user?.avatar
+          : DefaultImage}/>
+        <Label>{ user?.username }</Label>
         <AmountContainer>
-          <Ads>3<FeedIcon/></Ads>
+          <Ads>{ user?.number_of_ads }<FeedIcon/></Ads>
         </AmountContainer>
       </AvatarContainer>
       <InfoContainer>
         <InfoItem>Адрес, город</InfoItem>
-        <Text>{currentUser?.address}</Text>
+        <Text>
+          {
+            user?.address
+            ? user?.address
+            : 'Не указано. Укажите информацию, нажав на кнопку "изменить"'
+          }
+        </Text>
         <InfoItem>Описание</InfoItem>
         <Text>
-          { currentUser?.description }
+          {
+            user?.description
+            ? user?.description
+            : 'Не указано.'
+          }
         </Text>
         <InfoItem>Контакты</InfoItem>
         <ContactContainer>
           <ContactItem>
-            madjar07
-          </ContactItem>
-          <ContactItem>
-            admin@admin.com
+            { user?.email }
           </ContactItem>
         </ContactContainer>
       </InfoContainer>
       <BottomContainer>
-        <SmallLabel>**На сайте с { currentUser?.creation_date }</SmallLabel>
-        <ChangeButton onClick={() => navigate('/edit-profile')}>Изменить</ChangeButton>
+        <SmallLabel>**На сайте с { user?.creation_date }</SmallLabel>
+        {
+          isCurrentUser
+          ? <ChangeButton onClick={() => navigate('/edit-profile')}>Изменить</ChangeButton>
+          : <></>
+        }
       </BottomContainer>  
     </Container>
   )

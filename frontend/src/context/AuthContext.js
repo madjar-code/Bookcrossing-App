@@ -1,7 +1,10 @@
 import { 
   createContext,
   useState,
-  useEffect } from 'react'
+  useEffect
+} from 'react'
+import { useNavigate } from 'react-router-dom';
+
 import jwt_decode from "jwt-decode";
 
 const AuthContext = createContext()
@@ -10,6 +13,7 @@ export default AuthContext;
 
 
 export const AuthProvider = ({ children }) => {
+  const navigate = useNavigate()
   let [authTokens, setAuthTokens] = useState(
     () => localStorage.getItem('authTokens')
           ? JSON.parse(localStorage.getItem('authTokens'))
@@ -47,12 +51,12 @@ export const AuthProvider = ({ children }) => {
       body: JSON.stringify(credentials)
     })
 
-    if (response.status == 201) {
+    let data = await response.json()
+    if (response.status == 201){
       loginUser(credentials)
+      setTimeout(() => navigate('my-profile'), 1000)
     }
-    else {
-      alert('Некорректные данные')
-    }
+    return {data: data, status: response.status}
   }
 
   const logoutUser = () => {

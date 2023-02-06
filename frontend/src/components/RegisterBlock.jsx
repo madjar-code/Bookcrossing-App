@@ -1,6 +1,8 @@
-import React from "react";
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 import styled from 'styled-components'
+import AuthContext from "../context/AuthContext";
 
 
 const Wrapper = styled.div`
@@ -20,7 +22,7 @@ const Title = styled.h1`
   color: var(--faded-text);
 `
 
-const Form = styled.form`
+const Form = styled.div`
   display: flex;
   flex-direction: column;
 `
@@ -56,17 +58,78 @@ const Button = styled.button`
   }
 `
 
+const ErrorMessage = styled.p`
+  margin-top: -13.5px;
+  margin-left: 21px;
+  font-size: 12px;
+  font-weight: 600;
+  color: red;
+`
+
 
 const RegisterBlock = (props) => {
+  let { signupUser } = useContext(AuthContext)
+  let [credentials, setCredentials] = useState(
+    {email: '', username: '', password: '', confirm_password: ''} 
+  )
+  let [errorCredentials, setErrorCredentials] = useState({})
+
+  const handleClick = () => {
+    setErrorCredentials({})
+    signupUser(credentials).then(
+      object => {
+        if (object.status != 201){
+          setErrorCredentials(object.data)
+        }
+      }
+    )
+  }
+
   return (
     <Wrapper>
       <Title>Регистрация</Title>
       <Form>
-        <Input placeholder="Никнейм..."/>
-        <Input placeholder="Почта..."/>
-        <Input placeholder="Пароль..." type="password"/>
-        <Input placeholder="Подтверждение пароля..." type="password"/>
-        <Button>Регистрация</Button>
+        <Input
+          placeholder="Никнейм..."
+          onChange={(e) => setCredentials(
+            {...credentials, username: e.target.value}
+          )}/>
+          {
+            errorCredentials.username
+            ? <ErrorMessage>{errorCredentials.username}</ErrorMessage>
+            : <></>
+          }
+        <Input
+          placeholder="Почта..."
+          onChange={(e) => setCredentials(
+            {...credentials, email: e.target.value}
+          )}/>
+          {
+            errorCredentials.email
+            ? <ErrorMessage>{errorCredentials.email}</ErrorMessage>
+            : <></>
+          }
+        <Input
+          placeholder="Пароль..." type="password"
+          onChange={(e) => setCredentials(
+            {...credentials, password: e.target.value}
+          )}/>
+          {
+            errorCredentials.password
+            ? <ErrorMessage>{errorCredentials.password}</ErrorMessage>
+            : <></>
+          }
+        <Input
+          placeholder="Подтверждение пароля..." type="password"
+          onChange={(e) => setCredentials(
+            {...credentials, confirm_password: e.target.value}
+          )}/>
+          {
+            errorCredentials.confirm_password
+            ? <ErrorMessage>{errorCredentials.confirm_password}</ErrorMessage>
+            : <></>
+          }
+        <Button onClick={handleClick}>Регистрация</Button>
       </Form>
       {props.children}
     </Wrapper>
