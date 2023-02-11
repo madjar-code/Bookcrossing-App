@@ -1,3 +1,6 @@
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_headers
 from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.views import APIView
@@ -71,6 +74,8 @@ class CurrentUserAPIView(RetrieveUpdateAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = UserSerializer
 
+    @method_decorator(cache_page(60))
+    @method_decorator(vary_on_headers("Authorization",))
     def retrieve(self, request: Request) -> Response:
         serializer = self.serializer_class(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)

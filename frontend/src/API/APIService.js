@@ -70,6 +70,34 @@ export default class APIService {
     }
   }
 
+  static async getAdsByGenre(genreSlug) {
+    let response = await fetch(`/api/ads/genre-${genreSlug}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    let data = await response.json()
+
+    if (response.status === 200) {
+      return data
+    }
+  }
+
+  static async getGenres() {
+    let response = await fetch('/api/ads/genre-list', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    let data = await response.json()
+
+    if (response.status === 200) {
+      return data
+    }
+  }
+
   static async getMyAds(authTokens) {
     let response = await fetch('/api/ads/current/', {
       method: 'GET',

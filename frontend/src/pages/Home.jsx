@@ -42,27 +42,49 @@ const AdsContainer = styled.div`
 
 const Home = () => {
   const [ads, setAds] = useState([])
+  const [genres, setGenres] = useState([])
   const [filter, setFilter] = useState({sort: '', query: ''})
+
   const sortedAndSearchedAds = useAds(ads, filter.sort, filter.query)
 
   useEffect(() => {
     APIService.getAds()
-    .then(data => setAds(data))
+      .then(data => setAds(data))
+    APIService.getGenres()
+      .then(data => setGenres(data))
   }, [])
+
+  const handleChangeGenre = (e) => {
+    const genreSlug = e.target.value
+    if (genreSlug != '') {
+      APIService.getAdsByGenre(genreSlug)
+        .then(data => setAds(data))
+    }
+    else {
+      APIService.getAds()
+        .then(data => setAds(data))
+    }
+  }
 
   return (
     <Container>
       <HomeHeader filter={filter} setFilter={setFilter}/>
       <FilterContainer>
         <Filter>
-          <Select>
+          <Select onChange={e => handleChangeGenre(e)}>
             <Option selected disabled>
               Интересующие жанры
             </Option>
-            <Option >Все жанры</Option>
-            <Option value="Фантастика">Фантастика</Option>
-            <Option value="Роман">Роман</Option>
-            <Option value="Публицистика">Публицистика</Option>
+            <Option value=''>Все жанры</Option>
+            {
+              genres?.map((item, index) => (
+                <Option key={index}
+                  value={item?.slug}
+                  >
+                  {item?.name}
+                </Option>
+              ))
+            }
           </Select>
         </Filter>
       </FilterContainer>

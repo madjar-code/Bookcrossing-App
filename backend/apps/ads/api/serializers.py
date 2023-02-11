@@ -37,6 +37,20 @@ class SimpleAdSerializer(ModelSerializer):
         )
 
 
+class CreateAdSerializer(ModelSerializer):
+    class Meta:
+        model = Ad
+        fields = (
+            'book_title',
+            'book_image',
+            'book_author',
+            'book_genre',
+            'description',
+            'requirements_text',
+            'owner',
+        )
+
+
 class AdSerializer(ModelSerializer):
     creation_date = SerializerMethodField()
     owner_username = SerializerMethodField()
