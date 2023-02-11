@@ -1,13 +1,14 @@
 from django.contrib import auth
 from rest_framework import serializers
-from rest_framework.serializers import ValidationError
+from rest_framework.serializers import\
+    ModelSerializer, ValidationError
 from rest_framework.serializers import SerializerMethodField
 from rest_framework.exceptions import AuthenticationFailed
 from accounts.models import User
 from common.utils import transform_date
 
 
-class RegisterSerializer(serializers.ModelSerializer):
+class RegisterSerializer(ModelSerializer):
     username = serializers.CharField(min_length=3, required=True, allow_blank=True)
     email = serializers.EmailField(required=True, allow_blank=True)
     password = serializers.CharField(max_length=68, write_only=True, allow_blank=True)
@@ -69,7 +70,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 
-class LoginSerializer(serializers.ModelSerializer):
+class LoginSerializer(ModelSerializer):
     email = serializers.EmailField(max_length=255, min_length=3, write_only=True)
     password = serializers.CharField(max_length=68, min_length=2, write_only=True)
     # username = serializers.CharField(max_length=255, min_length=3)
@@ -103,7 +104,7 @@ class LoginSerializer(serializers.ModelSerializer):
             'refresh': user.tokens()['refresh']}
 
 
-class SimpleUserSerializer(serializers.ModelSerializer):
+class SimpleUserSerializer(ModelSerializer):
 
     class Meta:
         model = User
@@ -121,7 +122,15 @@ class SimpleUserSerializer(serializers.ModelSerializer):
         return user
 
 
-class UserSerializer(serializers.ModelSerializer):
+class AvatarSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            'avatar',
+        )
+
+
+class UserSerializer(ModelSerializer):
     creation_date = SerializerMethodField()
     number_of_ads = SerializerMethodField()
 
@@ -146,12 +155,12 @@ class UserSerializer(serializers.ModelSerializer):
             'creation_date',
         )
         read_only_fields = (
-            'username',
             'email',
             'slug',
         )
         extra_kwargs = {
-            'password': {'write_only': True, 'required': False},
+            'username': {'required': False},
+            'password': {'write_only': True, 'required': False}
         }
 
     def create(self, validated_data):

@@ -76,7 +76,6 @@ const Button = styled.button`
   box-shadow: var(--shadow);
 `
 
-
 const Select = styled.select`
   align-self: flex-start;
   margin-top: 20px;

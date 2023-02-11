@@ -1,7 +1,8 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import styled from 'styled-components'
 import APIService from "../API/APIService";
 import AuthContext from "../context/AuthContext";
-import styled from 'styled-components'
 import WBHeader from "../components/WBHeader";
 
 
@@ -11,7 +12,7 @@ const Container = styled.div`
   padding-bottom: 75px;
 `
 
-const Form = styled.form`
+const Form = styled.div`
   margin-top: 5px;
   padding: 0 20px;
 `
@@ -55,6 +56,20 @@ const Textarea = styled.textarea`
   }
 `
 
+const Uploader = styled.input`
+  margin-top: 5px;
+  position: relative;
+  left: 50%;
+  margin-left: -40px;
+  border-radius: 20px;
+  width: 80px;
+  height: 80px;
+  background-color: #E5E5E5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
 const Button = styled.button`
   position: relative;
   left: 50%;
@@ -68,13 +83,28 @@ const Button = styled.button`
 
 
 const EditProfile = () => {
-  let { authTokens } = useContext(AuthContext)
+  const { authTokens } = useContext(AuthContext)
+  const [currentUser, setCurrentUser] = useState(null)
+  const [avatar, setAvatar] = useState({})
+  const fileInput = useRef();
+  const navigate = useNavigate()
 
-  let [currentUser, setCurrentUser] = useState(null)
-  let [newData, setNewData] = useState({
-    username: '',
-    address: '',
-  })
+  const handleClick = () => {
+    const file = fileInput.current.files[0]
+
+    const newData = {
+      username: currentUser.username,
+      address: currentUser.address,
+      description: currentUser.description
+    }
+
+    let formData = new FormData()
+    formData.append('avatar', file)
+
+    APIService.postUserAvatar(formData, authTokens)
+    APIService.putCurrentUser(newData, authTokens)
+    setTimeout(() => navigate('/my-profile'), 1000)
+  }
 
   useEffect(() => {
     APIService.getCurrentUser(authTokens)
@@ -83,22 +113,37 @@ const EditProfile = () => {
       })
   }, [authTokens])
 
+  const handleChangeAvatar = () => {
+    const file = fileInput.current.files[0]
+    setAvatar({ name: file.name, url: URL.createObjectURL(file)})
+  }
+
   return (
     <Container>
       <WBHeader title='Редактировать профиль'/>
       <Form>
+        <Label>Аватарка</Label>
+        <Uploader
+          type='file'
+          accept="image/png, image/jpeg"
+          ref={fileInput}
+          onChange={handleChangeAvatar}
+        />
         <Input
           placeholder="Новый никнейм..."
-          value={newData.username}
-          onChange={e => setNewData({...newData, username: e.target.value})}
+          value={currentUser?.username}
+          onChange={e => setCurrentUser({...currentUser, username: e.target.value})}
         />
         <Input
           placeholder="Новый адрес..."
-          value={newData.address}
-          onChange={e => setNewData({...newData, address: e.target.value})}/>
+          value={currentUser?.address}
+          onChange={e => setCurrentUser({...currentUser, address: e.target.value})}/>
         <Label>Новое описание</Label>
-        <Textarea placeholder="Напишите коротко о себе..."/>
-        <Button>Сохранить!</Button>
+        <Textarea
+          placeholder="Напишите коротко о себе..."
+          value={currentUser?.description}
+          onChange={e => setCurrentUser({...currentUser, description: e.target.value})}/>
+        <Button onClick={handleClick}>Сохранить!</Button>
       </Form>
     </Container>
   )

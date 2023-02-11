@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import *
 
+
 @admin.register(BookGenre)
 class BookGenreAdmin(admin.ModelAdmin):
     search_fields = ('name',)
