@@ -9,12 +9,20 @@ from ads.models import *
 from .serializers import *
 
 
+class BookGenreListView(ListAPIView):
+    parser_classes = (MultiPartParser, FormParser, JSONParser)
+    serializer_class = BookGenreSerializer
+    queryset = BookGenre.objects.all()
+
+
 class AdListView(ListAPIView):
+    parser_classes = (MultiPartParser, FormParser, JSONParser)
     serializer_class = SimpleAdSerializer
     queryset = Ad.objects.filter(is_active=True)
 
 
 class GenreAdListView(ListAPIView):
+    parser_classes = (MultiPartParser, FormParser, JSONParser)
     serializer_class = SimpleAdSerializer
     queryset = Ad.objects.filter(is_active=True)
 
