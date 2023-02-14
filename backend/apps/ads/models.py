@@ -20,7 +20,7 @@ class BookGenre(UUIDModel):
         return self.name
 
 
-class Ad(UUIDModel, TimeStampedModel):
+class Ad(UUIDModel, SoftDeletionModel, TimeStampedModel):
     """Ad model."""
     book_title = models.CharField(max_length=255)
     book_image = models.ImageField(

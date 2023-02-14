@@ -24,7 +24,7 @@ class BookGenreListView(ListAPIView):
 class AdListView(ListAPIView):
     parser_classes = (MultiPartParser, FormParser, JSONParser)
     serializer_class = SimpleAdSerializer
-    queryset = Ad.objects.filter(is_active=True)
+    queryset = Ad.active_objects.all()
 
     # @method_decorator(cache_page(60))
     def get(self, *args, **kwargs):
@@ -34,7 +34,7 @@ class AdListView(ListAPIView):
 class GenreAdListView(ListAPIView):
     parser_classes = (MultiPartParser, FormParser, JSONParser)
     serializer_class = SimpleAdSerializer
-    queryset = Ad.objects.filter(is_active=True)
+    queryset = Ad.active_objects.all()
 
     # @method_decorator(cache_page(60))
     def get(self, request: Request, genre_slug: str) -> Response:
@@ -46,7 +46,7 @@ class GenreAdListView(ListAPIView):
 
 class MyAdList(ListAPIView):
     serializer_class = SimpleAdSerializer
-    queryset = Ad.objects.filter(is_active=True)
+    queryset = Ad.active_objects.all()
     permission_classes = (IsJWTAuthenticated,)
 
     # @method_decorator(cache_page(60))
@@ -74,7 +74,7 @@ class AdDetailsView(RetrieveUpdateDestroyAPIView):
     parser_classes = (MultiPartParser, FormParser, JSONParser)
     serializer_class = AdSerializer
     permission_classes = (IsJWTAuthenticated,)
-    queryset = Ad.objects.filter(is_active=True)
+    queryset = Ad.active_objects.all()
     lookup_field = 'slug'
 
     # @method_decorator(cache_page(60))
@@ -83,6 +83,5 @@ class AdDetailsView(RetrieveUpdateDestroyAPIView):
 
     def delete(self, request: Request, slug: str) -> Response:
         ad = Ad.objects.filter(slug=slug).first()
-        ad.is_active = False
-        ad.save()
+        ad.soft_delete()
         return Response('Deletion complete', status=status.HTTP_204_NO_CONTENT)

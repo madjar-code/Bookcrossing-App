@@ -52,10 +52,6 @@ export const AuthProvider = ({ children }) => {
     })
 
     let data = await response.json()
-    if (response.status == 201){
-      loginUser(credentials)
-      setTimeout(() => navigate('my-profile'), 1000)
-    }
     return {data: data, status: response.status}
   }
 

@@ -24,11 +24,7 @@ export default class APIService {
       },
       body: JSON.stringify(credentials)
     })
-    let data = await response.json()
-
-    if (response.status === 200) {
-      return data
-    }
+    return response.status
   }
 
   static async postUserAvatar(formData, authTokens){
@@ -39,7 +35,6 @@ export default class APIService {
       },
       body: formData
     })
-    console.log(response.status)
   }
 
   static async createAd(credentials, authTokens){

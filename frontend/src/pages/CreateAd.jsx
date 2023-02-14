@@ -114,6 +114,7 @@ const CreateAd = () => {
 
   const handleCreation = () => {
     APIService.createAd(adCredentials, authTokens)
+      
     navigate('/my-ads')
   }
 

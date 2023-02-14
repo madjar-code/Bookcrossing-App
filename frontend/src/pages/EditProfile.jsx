@@ -101,9 +101,12 @@ const EditProfile = () => {
     let formData = new FormData()
     formData.append('avatar', file)
 
-    APIService.postUserAvatar(formData, authTokens)
+    // APIService.postUserAvatar(formData, authTokens)
     APIService.putCurrentUser(newData, authTokens)
-    setTimeout(() => navigate('/my-profile'), 1000)
+      .then(status => {if (status==200){
+        navigate('/my-profile')
+      }}
+    )
   }
 
   useEffect(() => {

@@ -47,7 +47,7 @@ class CreateAdSerializer(ModelSerializer):
         model = Ad
         fields = (
             'book_title',
-            'book_image',
+            # 'book_image',
             'book_author',
             'book_genre',
             'description',

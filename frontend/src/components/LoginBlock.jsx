@@ -87,9 +87,9 @@ const LoginBlock = (props) => {
   const handleClick = () => {
     setValid(true)
     loginUser(credentials).then(
-      code => {
-        if (code === 200) {
-          setTimeout(() => navigate('/my-profile'), 1000)
+      status => {
+        if (status === 200) {
+          navigate('/my-profile')
         }
         else {
           setValid(false)

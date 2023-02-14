@@ -68,11 +68,12 @@ const ErrorMessage = styled.p`
 
 
 const RegisterBlock = (props) => {
-  let { signupUser } = useContext(AuthContext)
-  let [credentials, setCredentials] = useState(
+  const navigate = useNavigate()
+  const { signupUser, loginUser } = useContext(AuthContext)
+  const [credentials, setCredentials] = useState(
     {email: '', username: '', password: '', confirm_password: ''} 
   )
-  let [errorCredentials, setErrorCredentials] = useState({})
+  const [errorCredentials, setErrorCredentials] = useState({})
 
   const handleClick = () => {
     setErrorCredentials({})
@@ -81,9 +82,13 @@ const RegisterBlock = (props) => {
         if (object.status != 201){
           setErrorCredentials(object.data)
         }
-      }
-    )
-  }
+        else {
+          loginUser(credentials)
+            .then(status =>
+              {if (status == 200)
+                {navigate('/my-profile')}
+              }
+    )}})}
 
   return (
     <Wrapper>
