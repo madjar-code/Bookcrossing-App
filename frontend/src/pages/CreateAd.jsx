@@ -1,8 +1,11 @@
-import React from "react";
+import { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from 'styled-components'
 
 import WBHeader from "../components/WBHeader";
 import AddPhoto from "../assets/images/AddPhoto";
+import APIService from "../API/APIService";
+import AuthContext from "../context/AuthContext";
 
 
 const Container = styled.div`
@@ -10,7 +13,7 @@ const Container = styled.div`
   background-color: var(--front-color);
 `
 
-const Form = styled.form`
+const Form = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -81,7 +84,7 @@ const Select = styled.select`
   margin-top: 20px;
   text-align: left;
   outline: none;
-  width: 210px;
+  width: 215px;
   height: 30px;
   padding-left: 2px;
   font-size: 17px;
@@ -94,30 +97,75 @@ const Option = styled.option``
 
 
 const CreateAd = () => {
+  const { user, authTokens } = useContext(AuthContext)
+  const [genres, setGenres] = useState([])
+  const [adCredentials, setAdCredentials] = useState({
+    book_title: '',
+    // book_image: '',
+    // ISBN: '',
+    book_author: '',
+    book_genre: '',
+    description: '',
+    requirements_text: '',
+    owner: user.user_id,
+  })
+
+  const navigate = useNavigate()
+
+  const handleCreation = () => {
+    APIService.createAd(adCredentials, authTokens)
+    navigate('/my-ads')
+  }
+
+  useEffect(() => {
+    APIService.getGenres()
+      .then(data => setGenres(data))
+  }, [])
+
   return (
     <Container>
       <WBHeader title='Создать объявление'/>
       <Form>
-        <Input placeholder="Название книги..."/>
+        <Input
+          placeholder="Название книги..."
+          value={adCredentials.book_title}
+          onChange={e => setAdCredentials({...adCredentials, book_title: e.target.value})}/>
         <Uploader type='file'>
           <AddPhoto/>
         </Uploader>
-        <Input placeholder="Автор книги..."/>
-        <Input placeholder="ISBN..."/>
-        <Select>
+        <Input
+          placeholder="Автор книги..."
+          value={adCredentials.book_author}
+          onChange={e => setAdCredentials({...adCredentials, book_author: e.target.value})}/>
+        <Input
+          placeholder="ISBN..."
+          value={adCredentials.ISBN}
+          onChange={e => setAdCredentials({...adCredentials, ISBN: e.target.value})}/>
+        <Select onChange={e => setAdCredentials({...adCredentials, book_genre: e.target.value})}>
           <Option selected disabled>
-            Выберите жанр книги
+            Интересующие жанры
           </Option>
-          <Option>Все жанры</Option>
-          <Option>Фантастика</Option>
-          <Option>Роман</Option>
-          <Option>Публицистика</Option>
+            {genres?.map((item, index) => (
+              <Option key={index}
+                value={item?.id}
+                >
+                {item?.name}
+              </Option>
+            ))}
         </Select>
         <Label>Что вы хотите взамен?</Label>
-        <Textarea placeholder="Напишите о книгах или жанрах книг, которые вы хотите..."/>
+        <Textarea
+          placeholder="Напишите о книгах или жанрах книг, которые вы хотите..."
+          value={adCredentials.description}
+          onChange={e => setAdCredentials({...adCredentials, description: e.target.value})}
+        />
         <Label>Описание книги</Label>
-        <Textarea placeholder="Опишите книгу или какие-то ньюансы обмена..."/>
-        <Button>Создать!</Button>
+        <Textarea
+          placeholder="Опишите книгу или какие-то ньюансы обмена..."
+          value={adCredentials.requirements_text}
+          onChange={e => setAdCredentials({...adCredentials, requirements_text: e.target.value})}
+        />
+        <Button onClick={handleCreation}>Создать!</Button>
       </Form>
     </Container>
   )

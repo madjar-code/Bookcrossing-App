@@ -76,15 +76,13 @@ const Home = () => {
               Интересующие жанры
             </Option>
             <Option value=''>Все жанры</Option>
-            {
-              genres?.map((item, index) => (
+             {genres?.map((item, index) => (
                 <Option key={index}
                   value={item?.slug}
                   >
                   {item?.name}
                 </Option>
-              ))
-            }
+              ))}
           </Select>
         </Filter>
       </FilterContainer>

@@ -7,7 +7,11 @@ from common.utils import transform_date
 class BookGenreSerializer(ModelSerializer):
     class Meta:
         model = BookGenre
-        exclude = ('id',)
+        fields = (
+            'id',
+            'name',
+            'slug'
+        )
 
 
 class SimpleAdSerializer(ModelSerializer):
@@ -22,7 +26,8 @@ class SimpleAdSerializer(ModelSerializer):
         return obj.owner.slug
 
     def get_owner_avatar(self, obj):
-        return obj.owner.avatar.url
+        if obj.owner.avatar:
+            return obj.owner.avatar.url
 
     class Meta:
         model = Ad

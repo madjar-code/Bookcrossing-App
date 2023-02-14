@@ -1,8 +1,9 @@
 import { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import styled from 'styled-components'
 import APIService from "../API/APIService";
 import UserItem from "../components/UserItem";
+import ConfirmDeletion from "../components/ConfirmDeletion";
 import WBHeader from "../components/WBHeader";
 import AuthContext from "../context/AuthContext";
 
@@ -29,24 +30,6 @@ const ImgContainer = styled.div`
 const Image = styled.img`
   width: 275px;
   height: 320px;
-  object-fit: cover;
-`
-
-const SmallImgContainer = styled.div`
-  width: 275px;
-  height: 50px;
-  margin-top: 15px;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  column-gap: 10px;
-`
-
-const SmallImage = styled.img`
-  height: 50px;
-  width: 100%;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
-  border-radius: 5px;
-  margin-right: 6px;
   object-fit: cover;
 `
 
@@ -99,7 +82,6 @@ const Name = styled.p`
 `
 
 const Data = styled.span`
-  
 `
 
 const DescriptionContainer = styled.div`
@@ -111,10 +93,34 @@ const Description = styled.div`
   margin-top: 5px;
 `
 
+const EditDeleteContainer = styled.div`
+  margin-top: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
+const DeleteButton = styled.button`
+  color: #FF5050;
+  width: 130px;
+  height: 25px;
+  font-size: 15px;
+  background-color: white;
+  border-radius: 15px;
+  border: 2px solid #FF5050;
+
+  &:hover{
+    color: white;
+    background-color: red;
+    border-color: red;
+  }
+`
+
 
 const AdDetail = () => {
-  const { user } = useContext(AuthContext)
+  const navigate = useNavigate()
   const params = useParams()
+  const { user } = useContext(AuthContext)
   const [ad, setAd] = useState(null)
 
   const activeStyle = {opacity: '0.4', boxShadow: 'var(--big-shadow)'}
@@ -122,14 +128,31 @@ const AdDetail = () => {
   const [requestIsActive, setRequestActive] = useState(false)
   const [leftButtonStyle, setLeftButtonStyle] = useState(activeStyle)
   const [rightButtonStyle, setRightButtonStyle] = useState({})
+  const [modalIsActive, setModalActive] = useState(false)
+
+  const handleCloseModalWindow = () => {
+    setModalActive(false)
+  }
+
+  const handleDeleteAd = () => {
+    APIService.deleteAd(ad?.slug)
+      .then(status => {
+        if (status == 204){
+          navigate('/my-ads')
+        }
+      })
+  }
 
   useEffect(() => {
     APIService.getAdDetails(params.slug).then(
       data => setAd(data))
+  }, [params.slug])
+
+  useEffect(() => {
     if (ad?.owner == user?.user_id){
       setCurrentUserAsOwner(true)
     }
-  }, [params.slug])
+  }, [ad])
   
   return (
     <Container>
@@ -195,6 +218,21 @@ const AdDetail = () => {
            avatar:   ad?.owner_avatar,
            link: currentUserIsOwner ? 'my-profile': `users/${ad?.owner_slug}`}}/>
       </OwnerContainer>
+      <EditDeleteContainer>
+        {/* <EditButton>Редактировать</EditButton> */}
+        <DeleteButton
+          onClick={() => setModalActive(true)}
+        >
+          Удалить
+        </DeleteButton>
+      </EditDeleteContainer>
+      {
+        modalIsActive
+        ? <ConfirmDeletion
+            handleClose={handleCloseModalWindow}
+            handleDelete={handleDeleteAd}/>
+        : <></>
+      }
     </Container>
   )
 };

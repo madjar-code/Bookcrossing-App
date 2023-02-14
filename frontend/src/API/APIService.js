@@ -42,6 +42,18 @@ export default class APIService {
     console.log(response.status)
   }
 
+  static async createAd(credentials, authTokens){
+    let response = await fetch('/api/ads/create/', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + String(authTokens.access),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(credentials)
+    })
+    return response.json()
+  }
+
   static async getOneUser(slug) {
     let response = await fetch(`/api/accounts/${slug}`, {
       method: 'GET',
@@ -125,5 +137,12 @@ export default class APIService {
     if (response.status === 200) {
       return data
     }
+  }
+
+  static async deleteAd(slug){
+    let response = await fetch(`/api/ads/${slug}`, {
+      method: 'DELETE'
+    })
+    return response.status
   }
 }
