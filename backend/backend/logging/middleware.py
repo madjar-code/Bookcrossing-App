@@ -1,4 +1,4 @@
-import time
+import json, time
 
 
 class RequestTimeMiddleware:
@@ -7,12 +7,14 @@ class RequestTimeMiddleware:
     
     def __call__(self, request):
         timestamp = time.monotonic()
-
         response = self.get_response(request)
+        data = {
+            'path': request.path,
+            'request_total': round(time.monotonic() - timestamp, 3),
+            'status_code': response.status_code,
+        }
 
-        print(
-            f'Продолжительность запроса {request.path} - '
-            f'{time.monotonic() - timestamp:.3f} сек.'
-        )
-        
+        with open('request.log', 'a') as file:
+            file.write(json.dumps(data) + '\n')
+
         return response
