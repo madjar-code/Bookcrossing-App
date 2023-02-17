@@ -8,13 +8,14 @@ from rest_framework_simplejwt.views import \
    TokenObtainPairView 
 from .yasg import schema_view
 
+API_PREFIX = 'api'
 
 urlpatterns = [
    path("admin/", admin.site.urls),
-   path('api/accounts/', include('accounts.api.urls')),
-   path('api/ads/', include('ads.api.urls')),
-   path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-   path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+   path(f'{API_PREFIX}/accounts/', include('accounts.api.urls')),
+   path(f'{API_PREFIX}/ads/', include('ads.api.urls')),
+   path(f'{API_PREFIX}/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+   path(f'{API_PREFIX}/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += [
