@@ -25,11 +25,15 @@ class Ad(UUIDModel, SoftDeletionModel, TimeStampedModel):
     book_title = models.CharField(max_length=255)
     book_image = models.ImageField(
         null=True, blank=True,
-        upload_to='photos_of_books/')
+        upload_to='photos_of_books/'
+    )
     book_author = models.CharField(max_length=255)
     book_genre = models.ForeignKey(to=BookGenre, on_delete=models.PROTECT)
 
-    owner = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='ads')
+    owner = models.ForeignKey(
+        to=User, related_name='ads',
+        on_delete=models.CASCADE,
+    )
 
     requirements_text = models.TextField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
@@ -38,13 +42,14 @@ class Ad(UUIDModel, SoftDeletionModel, TimeStampedModel):
         max_length=255,
         unique=True, 
         null=True, 
-        blank=True)
+        blank=True
+    )
 
     def __str__(self) -> str:
         return self.book_title
 
     def save(self, *args, **kwargs):
-        """Slug  generation."""
+        """Slug generation."""
         if not self.slug:
             slug_string = create_slug('ad', Ad)
             self.slug = slug_string

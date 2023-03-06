@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
   BrowserRouter as Router,
   Routes,
@@ -12,13 +12,15 @@ import Login from './pages/Login'
 import Register from './pages/Register';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
+import ProfileAndAds from './pages/ProfileAndAds';
 import EditProfile from './pages/EditProfile';
 import AdDetail from './pages/AdDetail';
 import MyAds from './pages/MyAds';
 import CreateAd from './pages/CreateAd';
+import NotFoundPage from './pages/NotFoundPage';
 
 import './App.css';
-import NotFoundPage from './pages/NotFoundPage';
+import LoginAndRegister from './pages/LoginAndRegister';
 
 
 function PrivateRoute({ children }) {
@@ -28,6 +30,16 @@ function PrivateRoute({ children }) {
 
 
 function App() {
+  const [width, setWidth] = useState(window.innerWidth)
+  const breakpoint = 620
+
+
+  useEffect(() => {
+    const handleWindowResize = () => setWidth(window.innerWidth)
+    window.addEventListener('resize', handleWindowResize)
+    return () => window.removeEventListener('resize', handleWindowResize)
+  }, [])
+
   return (
     <Router>
       <AuthProvider>
@@ -35,15 +47,39 @@ function App() {
           <Route path='/' element={<Home/>}/>
           <Route path='/ads/:slug' element={<AdDetail/>}/>
           <Route path='/users/:slug' element={<Profile/>}/>
-          <Route path='/login' element={<Login/>}/>
-          <Route path='/register' element={<Register/>}/>
-          <Route
-            path='/my-profile'
-            element={
-              <PrivateRoute>
-                <Profile/>
-              </PrivateRoute>
-            }/>
+
+          {
+            width < breakpoint
+            ?
+            <>
+            <Route path='/login' element={<Login/>}/>
+            <Route path='/register' element={<Register/>}/>
+            </>
+            :
+            <>
+            <Route path='/login' element={<LoginAndRegister/>}/>
+            <Route path='/register' element={<LoginAndRegister/>}/>
+            </>
+          }
+          {
+            width < breakpoint
+            ?
+            <Route
+              path='/my-profile'
+              element={
+                <PrivateRoute>
+                  <Profile/>
+                </PrivateRoute>
+              }/>
+            :
+            <Route
+              path='/my-profile'
+              element={
+                <PrivateRoute>
+                  <ProfileAndAds/>
+                </PrivateRoute>
+              }/>
+          }
           <Route
             path='/edit-profile'
             element={

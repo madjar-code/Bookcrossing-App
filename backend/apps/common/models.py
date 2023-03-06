@@ -23,7 +23,7 @@ class SoftDeletionModel(models.Model):
         self.save()
 
     def restore(self):
-        self.is_active = False
+        self.is_active = True
         self.save()
     
     class Meta:
